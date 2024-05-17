@@ -1,14 +1,16 @@
 import { useForm } from "react-hook-form";
 import Api from "../Api";
 import { useContext, useEffect, useState } from "react";
-import { MapPinOff } from "lucide-react";
+import { MapPinOff, MoveLeft } from "lucide-react";
 import { AuthContext } from "../components/AuthContext";
 import Loader from "../components/Loader";
 import Load from "../components/Load";
+import { useNavigate } from "react-router-dom";
 export default function AbsentReason() {
   const [actionErrors, setActionErrors] = useState(null);
   const [actionSuccess, setActionSuccess] = useState(null);
   const [buttonLoading, setButtonLoading] = useState(false);
+  const navigate=useNavigate()
   const {
     userData,
     loading,
