@@ -80,18 +80,18 @@ const AddEmployee = () => {
         <p className="p-text underline underline-offset-[8px] text-center">
           اضافة موظف{" "}
         </p>
-
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="max-w-md mx-auto mt-10 space-y-4"
-        >
-          <div dir="ltr" className="h-6 text-center mb-2 text-white opacity-70">
+  <div dir="ltr" className="h-6 text-center mb-2 text-white opacity-70">
             <p>{errorMessage} </p>
             <p>{successMessage} </p>
             {errors.password && (
               <span>{errors.password.message}</span>
             )}
           </div>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="max-w-md mx-auto mt-10 space-y-4"
+        >
+        
           <div className="input-wrapper">
             <UserRound className="icon" />
             <input
