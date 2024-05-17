@@ -118,15 +118,9 @@ const AddEmployee = () => {
                 <EyeOff className="icon" />
               )}
             </span>
-            {errors.password && errors.password.type === "required" && (
-              <span>Password is required</span>
-            )}
+            {errors.password && errors.password.type === "required" &&setErrorMessage("Password is required")}
             {errors.password && errors.password.type === "validate" && (
-              <span>
-                Password must be at least 8 characters long and include at least
-                one uppercase letter, one lowercase letter, one number, and one
-                special character
-              </span>
+            setErrorMessage("Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character")
             )}
           </div>
           <div className=" mt-6 flex justify-between items-center gap-2">
