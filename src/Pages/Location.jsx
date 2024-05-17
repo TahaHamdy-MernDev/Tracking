@@ -15,12 +15,12 @@ export const Location = () => {
     const query = new URLSearchParams(location.search);
     const latitude = parseFloat(query.get('latitude'));
   const longitude = parseFloat(query.get('longitude'));
-    console.log(longitude,latitude)
+
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_APP_GOOGLE_API_KEY,
   });
   let employeeLocation= { lat: latitude, lng: longitude }
-  console.log(employeeLocation);
+
   const center = useMemo(() => (employeeLocation), []);
   useEffect(() => {
     if (!token) {

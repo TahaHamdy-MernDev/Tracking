@@ -21,10 +21,10 @@ const navigate = useNavigate()
           localStorage.removeItem("token")
           navigate('/')
 
-          console.error(
-            "Failed to fetch user data:",
-            error?.response?.data || error.message
-          );
+          // console.error(
+          //   "Failed to fetch user data:",
+          //   error?.response?.data || error.message
+          // );
         }
       }
       setLoading(false);

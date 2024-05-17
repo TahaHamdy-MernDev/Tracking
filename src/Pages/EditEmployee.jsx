@@ -40,12 +40,11 @@ const EditEmployee = () => {
     const fetchEmployeeData = async () => {
       try {
         const response = await Api.get(`user/get-user/${employeeId}`);
-        console.log(response?.data?.data);
         setEmployeeData(response?.data?.data);
         setValue("username", response?.data?.data.username);
         setValue("phoneNumber", response?.data?.data.phoneNumber);
       } catch (error) {
-        console.error("Failed to fetch employee data:", error);
+        // console.error("Failed to fetch employee data:", error);
       }
     };
 
@@ -121,7 +120,7 @@ const EditEmployee = () => {
         </div> */}
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="max-w-md mx-auto  space-y-4"
+          className="max-w-md mx-auto mt-10  space-y-4"
         >
           <div dir="ltr" className="h-auto transition-all duration-300 text-center mb-2 text-white opacity-70">
             <p>{errorMessage ||successMessage}</p>

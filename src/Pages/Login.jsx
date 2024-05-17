@@ -36,7 +36,7 @@ export default function Login() {
       const response = await Api.post("/auth/login", formData);
       setButtonStatus(false)
       let { data } = response.data;
-      console.log(data);
+
       setToken(data.token);
       setUserData(data.user);
       localStorage.setItem("token", data.token);

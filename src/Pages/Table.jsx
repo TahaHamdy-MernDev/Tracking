@@ -23,7 +23,7 @@ export const Table = () => {
         const response = await Api.get('user/get-all');
         setEmployees(response.data.data);
       } catch (err) {
-        console.error('Failed to fetch employees:', err.response);
+        // console.error('Failed to fetch employees:', err.response);
       }
     };
 
