@@ -88,6 +88,9 @@ const AddEmployee = () => {
           <div dir="ltr" className="h-6 text-center mb-2 text-white opacity-70">
             <p>{errorMessage} </p>
             <p>{successMessage} </p>
+            {errors.password && (
+              <span>{errors.password.message}</span>
+            )}
           </div>
           <div className="input-wrapper">
             <UserRound className="icon" />
@@ -105,24 +108,22 @@ const AddEmployee = () => {
               min="8"
               max="32"
               {...register("password", {
-                required: true,
-                validate: validatePassword,
+                required: "Password is required",
+                validate: (value) =>
+                  validatePassword(value) || "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character",
               })}
               placeholder="كلمة السر"
               className="input-field"
             />
-            <span className=" cursor-pointer" onClick={togglePassword}>
+            <span className="cursor-pointer" onClick={togglePassword}>
               {showPassword ? (
                 <Eye className="icon" />
               ) : (
                 <EyeOff className="icon" />
               )}
             </span>
-            {errors.password && errors.password.type === "required" &&setErrorMessage("Password is required")}
-            {errors.password && errors.password.type === "validate" && (
-            setErrorMessage("Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character")
-            )}
-          </div>
+           
+            </div>
           <div className=" mt-6 flex justify-between items-center gap-2">
             <div className="input-wrapper w-1/2">
               <MapPin className="icon" />
