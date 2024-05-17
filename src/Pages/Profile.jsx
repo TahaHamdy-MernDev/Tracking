@@ -91,7 +91,7 @@ export default function Profile() {
   return (
     <div className="w-screen h-screen relative overflow-hidden p-2 flex justify-center items-center">
       <h1 className="absolute top-0 md:top-10 mx-auto max-w-96 max-h-14 md:max-w-[60] h-12 mb-40 p-2">
-        <img src="/Attendance-Tracking-Client/logo.png" alt="" />
+        <img src="/logo.png" alt="" />
       </h1>
 
       {permissionDenied ? (
