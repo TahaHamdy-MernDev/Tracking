@@ -83,9 +83,9 @@ const AddEmployee = () => {
   <div dir="ltr" className="h-6 text-center mb-2 text-white opacity-70">
             <p>{errorMessage} </p>
             <p>{successMessage} </p>
-            {errors.password && (
+            {/* {errors.password && (
               <span>{errors.password.message}</span>
-            )}
+            )} */}
           </div>
         <form
           onSubmit={handleSubmit(onSubmit)}
