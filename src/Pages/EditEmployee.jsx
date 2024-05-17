@@ -135,14 +135,6 @@ const EditEmployee = () => {
             />
           </div>
           <div className="input-wrapper">
-            <Image className="icon" />
-            <input
-              type="file"
-              onChange={handleImageChange}
-              className="input-field"
-            />
-          </div>
-          <div className="input-wrapper">
             <Lock className="icon" />
             <input
               type={showPassword ? "text" : "password"}
