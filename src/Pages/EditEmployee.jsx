@@ -95,7 +95,7 @@ const EditEmployee = () => {
   let branch= employeeData?.companyBranch
   return (
     <div className="w-screen h-screen relative overflow-hidden p-2 flex justify-center items-center">
-      
+       <div className="absolute top-16 left-4 z-50 p-2 bg-blue-700 rounded-full " ><MoveLeft onClick={() => navigate(-1)} className="fill-white text-white cursor-pointer" /></div>
       <h1 className="absolute top-0 md:top-10 mx-auto max-w-96 max-h-14 md:max-w-[60] h-12 mb-40 p-2">
         <img src="/logo.png" alt="" />
       </h1>
