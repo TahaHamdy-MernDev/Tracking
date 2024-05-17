@@ -120,7 +120,7 @@ export default function Profile() {
               </p>
               <img
                 className="size-12"
-                src="/Attendance-Tracking-Client/profile.png"
+                src="/profile.png"
                 alt="profile-image"
               />
             </div>
