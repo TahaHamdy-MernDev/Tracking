@@ -27,17 +27,27 @@ import React, { useState, useEffect, useContext } from "react";
          navigate("/");
          return;
        }
-
+       const fetchAvailableDates = async () => {
+        try {
+          const response = await Api.get(`user/available-dates`);
+          console.log(response.data.data);
+          setAvailableDates(response.data.data.map(date => moment(date).format("YYYY-MM-DD")));
+        } catch (err) {
+          console.error("Failed to fetch available dates:", err.response);
+        }
+      };
        const fetchData = async () => {
          try {
-           const response = await Api.get(`user/reports?date=${moment(selectedDate).format("YYYY-MM-DD")}`);
+          const date = moment(selectedDate).format("YYYY-MM-DD")
+           const response = await Api.get(`user/reports?date=${date}`);
            console.log(response.data.data);
            setEmployees(response.data.data.dailyReports[0].reports);
-           setAvailableDates(response.data.data.availableDates.map(date => moment(date).format("YYYY-MM-DD")));
+         
          } catch (err) {
            console.error("Failed to fetch employees:", err.response);
          }
        };
+       fetchAvailableDates()
        fetchData();
      }, [token, navigate, selectedDate]);
 
