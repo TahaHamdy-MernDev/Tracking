@@ -18,7 +18,7 @@ const navigate = useNavigate()
           const response = await Api.post("auth/current-user");
           setUserData(response.data.data);
         } catch (error) {
-          localStorage.removeItem("token")
+          // localStorage.removeItem("token")
           navigate('/')
 
           // console.error(

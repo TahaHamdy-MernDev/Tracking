@@ -6,7 +6,7 @@ import AbsentReason from "../Pages/AbsentReason";
 import { Table } from "../Pages/Table";
 import { Location } from "../Pages/Location";
 import EditEmployee from "../Pages/EditEmployee";
-
+import MonthlyReport from "../Pages/MonthlyReport";
 
 
 const ProjectRoutes = () => {
@@ -38,6 +38,10 @@ const ProjectRoutes = () => {
     {
       path: "/edit-employee/:id",
       element: <EditEmployee />,
+    },
+    {
+      path: "/monthly-report",
+      element: <MonthlyReport />,
     },
   ]);
   return element;
