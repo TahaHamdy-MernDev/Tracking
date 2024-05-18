@@ -105,14 +105,14 @@ import React, { useState, useEffect, useContext } from "react";
        "تفاصيل الاذن",
        "",
      ];
-
+    //  max-md:overflow-x-auto
      return (
        <div className="flex justify-center items-start w-screen min-h-screen relative p-2">
          <h1 className="absolute top-0 md:top-10 mx-auto max-w-96 max-h-14 md:max-w-[60] h-12 mb-40 p-2">
            <img src="/logo.png" alt="" />
          </h1>
          <div
-           className="flex flex-col mt-40 bg-white max-w-full rounded-xl max-md:overflow-x-auto max-md:overflow-y-hidden"
+           className="flex flex-col mt-40 bg-white max-w-full rounded-xl  max-md:overflow-y-hidden"
            dir="ltr"
          >
            <div className="-m-1.5 w-full">
