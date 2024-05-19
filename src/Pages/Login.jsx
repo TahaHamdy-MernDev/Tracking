@@ -5,6 +5,7 @@ import { AuthContext } from "../components/AuthContext";
 import Api from "../Api";
 import { Navigate, useNavigate } from "react-router-dom";
 import Load from "../components/Load";
+import { toast } from "react-toastify";
 export default function Login() {
   const [buttonStatus,setButtonStatus]=useState(false)
   const {
@@ -47,15 +48,18 @@ export default function Login() {
       } else if (userRole === "employee") {
         navigate("/profile");
       }
+      toast.success("تم تسجيل الدخول بنجاح!");
     } catch (error) {
+      console.log(error.response.data.message)
+      if ((error.response.data.status = 400)) {
+        toast.info(error.response.data.message);
+      } else {
+        toast.error(err.response?.data?.message || "An error occurred while login");
+      }
       setButtonStatus(false)
       setToken(null);
       localStorage.removeItem("token")
-      if (error.response && error.response.data) {
-        setErrorMessage(error.response.data.message);
-      } else {
-        setErrorMessage("An unexpected error occurred. Please try again.");
-      }
+    
     }
   };
 
@@ -66,7 +70,7 @@ export default function Login() {
   }
 
   return (
-    <div className="flex justify-center items-center w-screen h-screen ">
+    <div className="flex justify-center items-center h-screen ">
       <div className=" flex justify-center items-center flex-col h-[640px] md:w-[800px]">
         <h1 className=" absolute top-0 md:top-10 mx-auto max-w-96 max-h-14 md:max-w-[60] h-12 mb-40 p-2">
           <img src="/logo.png" alt="" />

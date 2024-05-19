@@ -5,6 +5,7 @@ import Api from "../Api";
 import { MapPinOff } from "lucide-react";
 import { Navigate, useNavigate } from "react-router-dom";
 import Load from "../components/Load";
+import { toast } from "react-toastify";
 export default function Profile() {
   const [actionErrors, setActionErrors] = useState(null);
   const [actionSuccess, setActionSuccess] = useState(null);
@@ -21,48 +22,55 @@ export default function Profile() {
     token,
   } = useContext(AuthContext);
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     if (!location) {
-      getLocation(); 
+      getLocation();
     }
   }, [location, getLocation]);
-  
+
   useEffect(() => {
     if (!token) {
       navigate("/");
-      return
+      return;
     }
-   
   }, [token, navigate]);
   const checkIn = async () => {
-    setLoadingCheckIn(true); 
+    setLoadingCheckIn(true);
     await Api.post("user/check-in", { location })
       .then(({ data }) => {
         setUserData(data.data);
-        setActionSuccess("successfully checked in....")
+        toast.success("تم تسجيل الحضور بنجاح.");
       })
       .catch((error) => {
-        setActionErrors(error.response.data.message);
+        if ((error.response.data.status = 400)) {
+          toast.info(error.response.data.message);
+        } else {
+          toast.error("حدث خطأ أثناء تسجيل الحضور.");
+        }
       })
       .finally(() => {
-        setLoadingCheckIn(false); 
+        setLoadingCheckIn(false);
       });
   };
   if (loading) return <Loader />;
   if (!userData) return <Navigate to="/" replace />;
   const checkOut = async () => {
-    setLoadingCheckOut(true); 
+    setLoadingCheckOut(true);
     await Api.post("user/check-out", { location })
       .then(({ data }) => {
         setUserData(data.data);
-        setActionSuccess("successfully checked out....")
+        toast.success("تم تسجيل الانصراف بنجاح.");
       })
       .catch((error) => {
-        setActionErrors(error.response.data.message);
+        if ((error.response.data.status = 400)) {
+          toast.info(error.response.data.message);
+        } else {
+          toast.error("حدث خطأ أثناء تسجيل الانصراف.");
+        }
       })
       .finally(() => {
-        setLoadingCheckOut(false); 
+        setLoadingCheckOut(false);
       });
   };
 
@@ -81,15 +89,21 @@ export default function Profile() {
   const navigateToAddAbsentReason = () => {
     navigate("/absent-reason");
   };
-  
-  const { username: userName, attendance } = userData;
-  const permissionCount = attendance.filter((entry) => entry.absentReason).length;
-  const absenceCount = attendance.filter((entry) => entry.isAbsent && !entry.absentReason).length;
-  const attendanceCount = attendance.filter((entry) => !entry.isAbsent && !entry.absentReason).length;
 
- 
+  const { username: userName, attendance } = userData;
+  const permissionCount = attendance.filter(
+    (entry) => entry.absentReason
+  ).length;
+  const absenceCount = attendance.filter(
+    (entry) => entry.isAbsent && !entry.absentReason
+  ).length;
+  const attendanceCount = attendance.filter(
+    (entry) => !entry.isAbsent && !entry.absentReason
+  ).length;
+
   return (
     <div className="w-screen h-screen relative overflow-hidden p-2 flex justify-center items-center">
+     
       <h1 className="absolute top-0 md:top-10 mx-auto max-w-96 max-h-14 md:max-w-[60] h-12 mb-40 p-2">
         <img src="/logo.png" alt="" />
       </h1>
@@ -118,11 +132,7 @@ export default function Profile() {
               <p className="text-white font-cairo text-2xl font-normal">
                 {userName}
               </p>
-              <img
-                className="size-12"
-                src="/profile.png"
-                alt="profile-image"
-              />
+              <img className="size-12" src="/profile.png" alt="profile-image" />
             </div>
 
             <div className="flex justify-between items-center w-full">
@@ -152,24 +162,32 @@ export default function Profile() {
               </span>
             </div>
             <div className=" h-12">
-              <p dir="ltr" className="font-cairo text-white text-3xl font-normal opacity-70">
+              <p
+                dir="ltr"
+                className="font-cairo text-white text-3xl font-normal opacity-70"
+              >
                 {actionSuccess || actionErrors}
               </p>
             </div>
             <div className="flex justify-between flex-col items-center gap-4">
-            <button
-              disabled={loadingCheckIn || loadingCheckOut}
-              className={`rounded-lg font-cairo text-white h-12 w-40 bg-[#4AAF05] bg-opacity-[70%] inset-shadow text-2xl ${loadingCheckIn ? 'cursor-not-allowed' : ''}`}
-              onClick={checkIn} >
-              {loadingCheckIn ? <Load /> : "CHECK-IN"}
-            </button>
-            <button
-              disabled={loadingCheckIn || loadingCheckOut} 
-              onClick={checkOut}
-              className={`rounded-lg font-cairo text-white h-12 w-40 bg-[#D20000] bg-opacity-70 inset-shadow text-2xl ${loadingCheckOut ? 'cursor-not-allowed' : ''}`}
-            >
-              {loadingCheckOut ? <Load /> : "CHECK-OUT"}
-            </button>
+              <button
+                disabled={loadingCheckIn || loadingCheckOut}
+                className={`rounded-lg font-cairo text-white h-12 w-40 bg-[#4AAF05] bg-opacity-[70%] inset-shadow text-2xl ${
+                  loadingCheckIn ? "cursor-not-allowed" : ""
+                }`}
+                onClick={checkIn}
+              >
+                {loadingCheckIn ? <Load /> : "CHECK-IN"}
+              </button>
+              <button
+                disabled={loadingCheckIn || loadingCheckOut}
+                onClick={checkOut}
+                className={`rounded-lg font-cairo text-white h-12 w-40 bg-[#D20000] bg-opacity-70 inset-shadow text-2xl ${
+                  loadingCheckOut ? "cursor-not-allowed" : ""
+                }`}
+              >
+                {loadingCheckOut ? <Load /> : "CHECK-OUT"}
+              </button>
               <button
                 onClick={navigateToAddAbsentReason}
                 className="rounded-lg font-cairo text-white h-12 w-40 bg-[#FB8832] bg-opacity-70 inset-shadow text-2xl"

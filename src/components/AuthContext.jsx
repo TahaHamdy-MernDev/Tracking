@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const authToken= localStorage.getItem("token")
+  const [token, setToken] = useState(authToken|| null);
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [location, setLocation] = useState(null);
@@ -16,11 +17,11 @@ const navigate = useNavigate()
       if (token) {
         try {
           const response = await Api.post("auth/current-user");
+       
           setUserData(response.data.data);
         } catch (error) {
-          // localStorage.removeItem("token")
+          localStorage.removeItem("token")
           navigate('/')
-
           // console.error(
           //   "Failed to fetch user data:",
           //   error?.response?.data || error.message
@@ -30,9 +31,9 @@ const navigate = useNavigate()
       setLoading(false);
     };
   useEffect(() => {
-   
+
     fetchData()
-  }, []);
+  }, [token]);
 
   const getLocation = () => {
     if (!navigator.geolocation) {

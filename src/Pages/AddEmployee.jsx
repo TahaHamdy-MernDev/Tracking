@@ -1,4 +1,170 @@
-import { Eye, EyeOff, Lock, MapPin, MoveLeft, Phone, UserRound } from "lucide-react";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import Api from "../Api";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Load from "../components/Load";
+import {
+  Eye,
+  EyeOff,
+  Lock,
+  MapPin,
+  MoveLeft,
+  Phone,
+  UserRound,
+} from "lucide-react";
+
+const AddEmployee = () => {
+  const [loading, setLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const onSubmit = async (data) => {
+    setLoading(true);
+    try {
+      await Api.post("auth/register", data)
+        .then((res) => {
+          reset()
+          toast.success(res.data.message);
+        })
+        .catch((err) => {
+          toast.error(err.response?.data?.message || "An error occurred while submitting the form.");
+        });
+    } catch (error) {
+      toast.error("An error occurred while submitting the form.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const companyBranches = [
+    { id: 1, name: "زايد" },
+    { id: 2, name: "الاسكندرية" },
+    { id: 3, name: "التجمع" },
+    { id: 4, name: "الساحل" },
+  ];
+
+  const validatePassword = (value) => {
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return regex.test(value);
+  };
+
+  const navigate = useNavigate();
+
+  // Show validation errors as toast notifications
+  const handleValidationErrors = (errors) => {
+    Object.values(errors).forEach((error) => {
+      toast.error(error.message);
+    });
+  };
+
+  return (
+    <div className="w-screen h-screen relative overflow-hidden p-2 flex justify-center items-center">
+      {/* <ToastContainer /> */}
+      <div className="absolute top-16 left-4 z-50 p-2 bg-blue-700 rounded-full">
+        <MoveLeft
+          onClick={() => navigate(-1)}
+          className="fill-white text-white cursor-pointer"
+        />
+      </div>
+      <h1 className="absolute top-0 md:top-10 mx-auto max-w-96 max-h-14 md:max-w-[60] h-12 mb-40 p-2">
+        <img src="/logo.png" alt="" />
+      </h1>
+      <div>
+        <p className="p-text underline underline-offset-[8px] text-center">
+          اضافة موظف
+        </p>
+        <form
+          onSubmit={handleSubmit(onSubmit, handleValidationErrors)}
+          className="max-w-md mx-auto mt-10 space-y-4"
+        >
+          <div className="input-wrapper">
+            <UserRound className="icon" />
+            <input
+              type="text"
+              {...register("username", { required: "اسم المستخدم مطلوب" })}
+              placeholder="اسم المستخدم"
+              className="input-field"
+            />
+          </div>
+          <div className="input-wrapper">
+            <Lock className="icon" />
+            <input
+              type={showPassword ? "text" : "password"}
+              {...register("password", {
+                required: "كلمة السر مطلوبة",
+                validate: (value) =>
+                  validatePassword(value) ||
+                  "يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل، بما في ذلك حرف كبير، حرف صغير، رقم، وحرف خاص",
+              })}
+              placeholder="كلمة السر"
+              className="input-field"
+            />
+            <span className="cursor-pointer" onClick={togglePassword}>
+              {showPassword ? <Eye className="icon" /> : <EyeOff className="icon" />}
+            </span>
+          </div>
+          <div className="mt-6 flex justify-between items-center gap-2">
+            <div className="input-wrapper w-1/2">
+              <MapPin className="icon" />
+              <select
+                {...register("companyBranch", { required: "الفرع مطلوب" })}
+                className="p-0 m-0 bg-transparent h-[1.7rem] focus:outline-none"
+                defaultValue=""
+              >
+                <option value="" disabled>
+                  الفرع
+                </option>
+                {companyBranches.map((branch) => (
+                  <option className="p-2" key={branch.id} value={branch.name}>
+                    {branch.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="input-wrapper w-1/2">
+              <Phone className="icon rotate-[260deg]" />
+              <input
+                type="text"
+                {...register("phoneNumber", { required: "رقم الهاتف مطلوب" })}
+                placeholder="رقم الهاتف"
+                className="input-field"
+              />
+            </div>
+          </div>
+          <button type="submit" className="form-btn" disabled={loading}>
+            {loading ? <Load /> : "انشاء حساب"}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default AddEmployee;
+
+
+
+/*
+import {
+  Eye,
+  EyeOff,
+  Lock,
+  MapPin,
+  MoveLeft,
+  Phone,
+  UserRound,
+} from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Api from "../Api";
@@ -20,7 +186,7 @@ const AddEmployee = () => {
     setShowPassword(!showPassword);
   };
   const onSubmit = async (data) => {
-    setLoading(true); 
+    setLoading(true);
     try {
       await Api.post("auth/register", data)
         .then((res) => {
@@ -33,7 +199,7 @@ const AddEmployee = () => {
     } catch (error) {
       setErrorMessage("An error occurred while submitting the form.");
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
   const companyBranches = [
@@ -69,10 +235,15 @@ const AddEmployee = () => {
       setSuccessMessage(null);
     }, 5000);
   }
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <div className=" w-screen h-screen  relative overflow-hidden p-2 flex justify-center items-center">
-       <div className="absolute top-16 left-4 z-50 p-2 bg-blue-700 rounded-full " ><MoveLeft onClick={() => navigate(-1)} className="fill-white text-white cursor-pointer" /></div>
+      <div className="absolute top-16 left-4 z-50 p-2 bg-blue-700 rounded-full ">
+        <MoveLeft
+          onClick={() => navigate(-1)}
+          className="fill-white text-white cursor-pointer"
+        />
+      </div>
       <h1 className="absolute top-0 md:top-10 mx-auto max-w-96 max-h-14 md:max-w-[60] h-12 mb-40 p-2">
         <img src="/logo.png" alt="" />
       </h1>
@@ -80,21 +251,18 @@ const AddEmployee = () => {
         <p className="p-text underline underline-offset-[8px] text-center">
           اضافة موظف{" "}
         </p>
-  <div dir="ltr" className="h-6 text-center mb-2 text-white opacity-70">
-            <p>{errorMessage} </p>
-            <p>{successMessage} </p>
-            {/* {errors.password && (
-              <span>{errors.password.message}</span>
-            )} */}
-          </div>
+        <div dir="ltr" className="h-6 text-center mb-2 text-white opacity-70">
+          <p>{errorMessage} </p>
+          <p>{successMessage} </p>
+        </div>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="max-w-md mx-auto mt-10 space-y-4"
         >
-        
           <div className="input-wrapper">
             <UserRound className="icon" />
             <input
+            type="text"
               {...register("username", { required: true })}
               placeholder="اسم المستخدم"
               className="input-field"
@@ -110,7 +278,8 @@ const AddEmployee = () => {
               {...register("password", {
                 required: "Password is required",
                 validate: (value) =>
-                  validatePassword(value) || "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character",
+                  validatePassword(value) ||
+                  "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character",
               })}
               placeholder="كلمة السر"
               className="input-field"
@@ -122,8 +291,7 @@ const AddEmployee = () => {
                 <EyeOff className="icon" />
               )}
             </span>
-           
-            </div>
+          </div>
           <div className=" mt-6 flex justify-between items-center gap-2">
             <div className="input-wrapper w-1/2">
               <MapPin className="icon" />
@@ -154,7 +322,7 @@ const AddEmployee = () => {
           </div>
 
           <button type="submit" className="form-btn" disabled={loading}>
-            {loading ? <Load/> : "انشاء حساب"}
+            {loading ? <Load /> : "انشاء حساب"}
           </button>
         </form>
       </div>
@@ -162,3 +330,4 @@ const AddEmployee = () => {
   );
 };
 export default AddEmployee;
+*/

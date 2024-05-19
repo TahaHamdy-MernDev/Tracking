@@ -36,13 +36,16 @@ const MonthlyReport = () => {
   };
 
   return (
-    <div className="flex justify-center items-start w-screen min-h-screen relative p-2">
+    <div className="flex justify-center items-start  min-h-screen relative p-2">
       <h1 className="absolute top-0 md:top-10 mx-auto max-w-96 max-h-14 md:max-w-[60] h-12 mb-40 p-2">
         <img src="/logo.png" alt="" />
       </h1>
-      <div className="flex flex-col mt-40 bg-white max-w-full rounded-xl max-md:overflow-x-auto max-md:overflow-y-hidden" dir="ltr">
-        <div className="-m-1.5 w-full">
-          <div className="p-1.5 inline-block align-middle overflow-hidden">
+      <div
+        className="flex flex-col mt-40 bg-white max-w-full rounded-xl overflow-x-auto overflow-y-hidden"
+        dir="ltr"
+      >
+        <div className=" w-full">
+          <div className=" inline-block align-middle">
             <div className="border rounded-lg divide-y divide-gray-200">
               <div className="py-3 px-4 flex justify-between">
                 <div className="relative max-w-xs">
@@ -63,7 +66,7 @@ const MonthlyReport = () => {
                       <th className="px-6 py-3 text-center text-lg font-medium text-[#333333] uppercase whitespace-nowrap">#</th>
                       <th className="px-6 py-3 text-center text-lg font-medium text-[#333333] uppercase whitespace-nowrap">اسم الموظف</th>
                       <th className="px-6 py-3 text-center text-lg font-medium text-[#333333] uppercase whitespace-nowrap">الفرع</th>
-                      <th className="px-6 py-3 text-center text-lg font-medium text-[#333333] uppercase whitespace-nowrap">عدد ساعات العمل</th>
+                      {/* <th className="px-6 py-3 text-center text-lg font-medium text-[#333333] uppercase whitespace-nowrap">عدد ساعات العمل</th> */}
                       <th className="px-6 py-3 text-center text-lg font-medium text-[#333333] uppercase whitespace-nowrap">عدد مرات الحضور</th>
                       <th className="px-6 py-3 text-center text-lg font-medium text-[#333333] uppercase whitespace-nowrap">عدد مرات الغياب</th>
                       <th className="px-6 py-3 text-center text-lg font-medium text-[#333333] uppercase whitespace-nowrap">عدد مرات الغياب بعذر</th>
@@ -74,11 +77,11 @@ const MonthlyReport = () => {
                       <tr key={index}>
                         <td className="px-6 py-4 whitespace-nowrap text-base font-medium text-gray-800">{index + 1}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-base font-medium text-gray-800">{report.username || "N/A"}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-base font-medium text-gray-800">{report.companyBranch || "N/A"}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-base font-medium text-gray-800">{report.totalWorkHours || "N/A"}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-base font-medium text-gray-800">{report.totalCheckInCount || "N/A"}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-base font-medium text-gray-800">{report.totalAbsenceCount || "N/A"}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-base font-medium text-gray-800">{report.totalAbsenceWithReasonCount || "N/A"}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-base text-center font-medium text-gray-800">{report.companyBranch || "N/A"}</td>
+                        {/* <td className="px-6 py-4 whitespace-nowrap text-base text-center font-medium text-gray-800">{report.totalWorkHours || "N/A"}</td> */}
+                        <td className="px-6 py-4 whitespace-nowrap text-base text-center font-medium text-gray-800">{report.totalCheckInCount || "N/A"}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-base text-center font-medium text-gray-800">{report.totalAbsenceCount || "N/A"}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-base text-center font-medium text-gray-800">{report.totalAbsenceWithReasonCount || "N/A"}</td>
                       </tr>
                     ))}
                   </tbody>
