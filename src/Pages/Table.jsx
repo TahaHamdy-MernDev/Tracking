@@ -135,7 +135,6 @@ export const Table = () => {
   ];
 const logout=()=>{
   setToken(null)
-  // navigate("/");
 }
   return (
     <div className="flex justify-center items-start min-h-screen relative p-2">

@@ -41,10 +41,10 @@ const MonthlyReport = () => {
         <img src="/logo.png" alt="" />
       </h1>
       <div
-        className="flex flex-col mt-40 bg-white max-w-full rounded-xl overflow-x-auto overflow-y-hidden"
+        className="min-h-96 flex flex-col mt-40 bg-white max-w-full rounded-xl overflow-x-auto overflow-y-hidden"
         dir="ltr"
       >
-        <div className=" w-full">
+        <div className="min-h-96 w-full">
           <div className=" inline-block align-middle">
             <div className="border rounded-lg divide-y divide-gray-200">
               <div className="py-3 px-4 flex justify-between">
@@ -73,7 +73,7 @@ const MonthlyReport = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {reports.map((report, index) => (
+                    {reports?.map((report, index) => (
                       <tr key={index}>
                         <td className="px-6 py-4 whitespace-nowrap text-base font-medium text-gray-800">{index + 1}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-base font-medium text-gray-800">{report.username || "N/A"}</td>
