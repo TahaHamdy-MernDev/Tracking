@@ -18,7 +18,7 @@ const MonthlyReport = () => {
     const fetchMonthlyReport = async () => {
       try {
         const response = await Api.get(`user/monthly-report?month=${moment(selectedMonth).format("YYYY-MM")}`);
-        console.log(response.data.data);
+
         setReports(response.data.data);
       } catch (err) {
         console.error("Failed to fetch monthly report:", err.response);

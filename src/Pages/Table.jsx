@@ -55,7 +55,7 @@ export const Table = () => {
 
         if (selected.isSame(today, "day")) {
           const response = await Api.get("/user/today-live-data");
-          console.log("today data :", response.data.data);
+
           setEmployees(response.data.data);
         } else {
           const date = selected.format("YYYY-MM-DD");
@@ -271,7 +271,7 @@ export const Table = () => {
                         </span>
 
                         <span
-                          className="text-gray-700 block w-full text-left px-4 py-2 text-sm"
+                          className="text-gray-700 block w-full text-left px-4 py-2 text-sm cursor-pointer"
                           role="menuitem"
                           tabIndex="-1"
                           id="menu-item-3"
@@ -309,7 +309,7 @@ export const Table = () => {
                   <tbody className="divide-y divide-gray-200">
                     {filteredAndSortedEmployees?.length > 0 ? (
                       filteredAndSortedEmployees.map((employee, index) => {
-                        console.log(employee);
+
                         return (
                           <tr key={index}>
                             <td className="px-6 py-4 cursor-default whitespace-nowrap text-base font-medium text-gray-800">
@@ -458,13 +458,7 @@ export const Table = () => {
               </div>
               <div className="mt-5 sm:mt-6 absolute top-0 left-5">
               <X className=" transition-all duration-300 hover:text-blue-700 cursor-pointer"  onClick={closeModal} />
-                {/* <button
-                  type="button"
-                  className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white  focus:outline-none focus:ring-0 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
-                 
-                >
-                  Close
-                </button> */}
+           
               </div>
             </div>
           </div>

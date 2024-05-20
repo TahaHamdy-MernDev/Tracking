@@ -50,7 +50,7 @@ export default function Login() {
       }
       toast.success("تم تسجيل الدخول بنجاح!");
     } catch (error) {
-      console.log(error.response.data.message)
+
       if ((error.response.data.status = 400)) {
         toast.info(error.response.data.message);
       } else {

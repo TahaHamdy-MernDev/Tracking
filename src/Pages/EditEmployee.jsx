@@ -67,7 +67,7 @@ const EditEmployee = () => {
       await Api.put(`user/update/${employeeId}`, data);
       toast.success("تم تحديث بيانات الموظف بنجاح.");
     } catch (err) {
-      console.log(err.response.data);
+
       toast.error(err.response?.data?.message || "An error occurred while updating employee data.");
     } finally {
       setButtonLoading(false);
