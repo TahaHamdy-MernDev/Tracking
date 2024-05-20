@@ -100,20 +100,26 @@ export const Table = () => {
     })
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-  const getStatusText = (status) => {
-    switch (status) {
-      case "No Record":
-        return { text: "لم يبدأ", bgColor: "#E2E8F0" };
-      case "Pending":
-        return { text: "قيد الانتظار", bgColor: "#FB8832" };
-      case "Completed":
-        return { text: "مكتمل", bgColor: "#4AAF05" };
-      case "Canceled":
-        return { text: "ملغي", bgColor: "#FF5756" };
-      default:
-        return { text: "", bgColor: "#E2E8F0" };
-    }
-  };
+    const getStatusText = (status) => {
+      switch (status) {
+        case "No Record":
+          return { text: "لم يبدأ", bgColor: "#E2E8F0" };
+        case "Pending":
+          return { text: "قيد الانتظار", bgColor: "#FB8832" };
+        case "Completed":
+          return { text: "مكتمل", bgColor: "#4AAF05" };
+        case "Canceled":
+          return { text: "ملغي", bgColor: "#FF5756" };
+        case "Absent with Reason":
+          return { text: "غائب مع سبب", bgColor: "#FFDD57" }; 
+        case "Absent without Reason":
+          return { text: "غائب بدون سبب", bgColor: "#FF5756" };
+        case "Day not completed":
+          return { text: "اخذ اذن انصراف", bgColor: "#E2E8F0" };
+        default:
+          return { text: "", bgColor: "#E2E8F0" };
+      }
+    };
 
   const addEmployee = () => {
     navigate("/add-employee");
@@ -202,6 +208,9 @@ export const Table = () => {
                       <option value="No Record">لم يبدأ</option>
                       <option value="Pending">قيد الانتظار</option>
                       <option value="Completed">مكتمل</option>
+                      <option value="Absent with Reason"> غائب مع سبب</option>
+                      <option value="Absent without Reason"> غائب بدون سبب</option>
+                      <option value="Day not completed">اخذ اذن انصراف</option>
                       <option value="Canceled">ملغي</option>
                     </select>
                   </div>
@@ -320,7 +329,7 @@ export const Table = () => {
                             </td>
                             <td className="px-6 py-4 cursor-default text-center whitespace-nowrap text-base text-gray-800">
                               <span
-                                className="flex items-center cursor-default justify-center px-2 py-1 w-24 rounded-full"
+                                className="flex items-center cursor-default justify-center px-2 py-1 w-28 rounded-full"
                                 style={{
                                   backgroundColor: getStatusText(
                                     employee.status
