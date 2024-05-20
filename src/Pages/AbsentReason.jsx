@@ -5,7 +5,7 @@ import { MapPinOff, MoveLeft } from "lucide-react";
 import { AuthContext } from "../components/AuthContext";
 import Loader from "../components/Loader";
 import Load from "../components/Load";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 export default function AbsentReason() {
   const [actionErrors, setActionErrors] = useState(null);
   const [actionSuccess, setActionSuccess] = useState(null);

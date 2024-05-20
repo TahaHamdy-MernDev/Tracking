@@ -161,14 +161,6 @@ export default function Profile() {
                 </p>
               </span>
             </div>
-            <div className=" h-12">
-              <p
-                dir="ltr"
-                className="font-cairo text-white text-3xl font-normal opacity-70"
-              >
-                {actionSuccess || actionErrors}
-              </p>
-            </div>
             <div className="flex justify-between flex-col items-center gap-4">
               <button
                 disabled={loadingCheckIn || loadingCheckOut}
