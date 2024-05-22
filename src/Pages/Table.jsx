@@ -18,6 +18,7 @@ export const Table = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [absenceReason, setAbsenceReason] = useState("");
+  const [absenceTime, setAbsenceTime] = useState();
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -125,8 +126,9 @@ export const Table = () => {
     navigate("/add-employee");
   };
 
-  const openModal = (reason) => {
+  const openModal = (reason,absentTime) => {
     setAbsenceReason(reason);
+    setAbsenceTime(moment(absentTime).format("hh:mm A"))
     setIsModalOpen(true);
   };
 
@@ -389,7 +391,7 @@ export const Table = () => {
                             <td className="px-6 py-4 whitespace-nowrap text-base text-gray-800">
                               {employee.absentReason ? (
                                 <span
-                                  onClick={() => openModal(employee.absentReason)}
+                                  onClick={() => openModal(employee.absentReason,employee.absentTime)}
                                   className="cursor-pointer text-blue-600 underline"
                                 >
                                   {employee.absentReason.length > 10
@@ -458,17 +460,19 @@ export const Table = () => {
                     className="text-lg leading-6 font-medium text-gray-900"
                     id="modal-title"
                   >
-                    Absence Reason
+                
                   </h3>
-                  <div className="mt-2">
+                  <div className="mt-2 p-6 text-start">
                     <p className="text-sm text-gray-500">{absenceReason}</p>
                   </div>
                 </div>
               </div>
-              <div className="mt-5 sm:mt-6 absolute top-0 left-5">
-              <X className=" transition-all duration-300 hover:text-blue-700 cursor-pointer"  onClick={closeModal} />
-           
+              <div className="mt-5 sm:mt-6 absolute top-0">
+              <X className=" transition-all duration-300 hover:text-blue-700 cursor-pointer"  onClick={closeModal} />       
               </div>
+              <div className="mb-2 sm:mb-4 absolute bottom-0 left-5 ">
+              {absenceTime}
+                  </div>
             </div>
           </div>
         </div>

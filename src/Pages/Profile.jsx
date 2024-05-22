@@ -92,7 +92,7 @@ export default function Profile() {
 
   const { username: userName, attendance } = userData;
   const permissionCount = attendance.filter(
-    (entry) => entry.absentReason
+    (entry) => entry.isAbsent
   ).length;
   const absenceCount = attendance.filter(
     (entry) => entry.isAbsent && !entry.absentReason
