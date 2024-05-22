@@ -101,27 +101,47 @@ export const Table = () => {
     })
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
+    // const getStatusText = (status) => {
+    //   switch (status) {
+    //     case "No Record":
+    //       return { text: "لم يبدأ", bgColor: "#E2E8F0" };
+    //     case "Pending":
+    //       return { text: "قيد الانتظار", bgColor: "#FB8832" };
+    //     case "Completed":
+    //       return { text: "مكتمل", bgColor: "#4AAF05" };
+    //     case "Canceled":
+    //       return { text: "ملغي", bgColor: "#FF5756" };
+    //     case "Absent with Reason":
+    //       return { text: "غائب مع سبب", bgColor: "#FFDD57" }; 
+    //     case "Absent without Reason":
+    //       return { text: "غائب بدون سبب", bgColor: "#FF5756" };
+    //     case "Day not completed":
+    //       return { text: "اخذ اذن انصراف", bgColor: "#E2E8F0" };
+    //     default:
+    //       return { text: "", bgColor: "#0000" };
+    //   }
+    // };
     const getStatusText = (status) => {
       switch (status) {
         case "No Record":
-          return { text: "لم يبدأ", bgColor: "#E2E8F0" };
+          return { text: "لم يبدأ", bgColor: "#E2E8F0" }; // Light Gray
         case "Pending":
-          return { text: "قيد الانتظار", bgColor: "#FB8832" };
+          return { text: "قيد الانتظار", bgColor: "#FB8832" }; // Orange
         case "Completed":
-          return { text: "مكتمل", bgColor: "#4AAF05" };
+          return { text: "مكتمل", bgColor: "#4AAF05" }; // Green
         case "Canceled":
-          return { text: "ملغي", bgColor: "#FF5756" };
+          return { text: "ملغي", bgColor: "#FF5756" }; // Red
         case "Absent with Reason":
-          return { text: "غائب مع سبب", bgColor: "#FFDD57" }; 
+          return { text: "غائب مع سبب", bgColor: "#FFDD57" }; // Yellow
         case "Absent without Reason":
-          return { text: "غائب بدون سبب", bgColor: "#FF5756" };
+          return { text: "غائب بدون سبب", bgColor: "#FF5756" }; // Red
         case "Day not completed":
-          return { text: "اخذ اذن انصراف", bgColor: "#E2E8F0" };
+          return { text: "اخذ اذن انصراف", bgColor: "#E2E8F0" }; // Light Gray
         default:
-          return { text: "", bgColor: "#E2E8F0" };
+          return { text: "", bgColor: "#f4f4f4" }; // Transparent
       }
     };
-
+    
   const addEmployee = () => {
     navigate("/add-employee");
   };
