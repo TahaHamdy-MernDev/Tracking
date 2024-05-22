@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import  { useState, useEffect, useContext } from "react";
 import Api from "../Api";
 import { AuthContext } from "../components/AuthContext";
 import Loader from "../components/Loader";
@@ -9,6 +9,7 @@ import { Navigate } from "react-router-dom";
 
 const MonthlyReport = () => {
   const [reports, setReports] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedMonth, setSelectedMonth] = useState(new Date());
   const { userData, loading, token } = useContext(AuthContext);
 
@@ -36,6 +37,20 @@ const MonthlyReport = () => {
     setSelectedMonth(date);
   };
 
+ 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+  const filteredAndSortedEmployees = reports
+  ?.filter((report) => {
+    const matchesSearchTerm =
+      report.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      report.uniqueNumber.toLowerCase().includes(searchTerm.toLowerCase());
+
+    return matchesSearchTerm
+  })
+  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
   return (
     <div className="flex justify-center items-start  min-h-screen relative p-2">
       <h1 className="absolute top-0 md:top-10 mx-auto max-w-96 max-h-14 md:max-w-[60] h-12 mb-40 p-2">
@@ -48,7 +63,40 @@ const MonthlyReport = () => {
         <div className="min-h-96 w-full">
           <div className=" inline-block align-middle">
             <div className="border rounded-lg divide-y divide-gray-200">
+          
               <div className="py-3 px-4 flex justify-between">
+              <div className="relative max-w-xs">
+                  <label className="sr-only">بحث</label>
+                  <input
+                    dir="rtl"
+                    type="text"
+                    name="hs-table-with-pagination-search"
+                    id="hs-table-with-pagination-search"
+                    className="py-2 px-3 ps-9 block w-full bg-[#E2E8F0] border-gray-200 shadow-sm rounded-lg text-sm focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
+                    placeholder="ابحث عن موظف"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                  />
+                  <div className="absolute inset-y-1/2 start-0 flex items-center pointer-events-none ps-3">
+                    <svg
+                      dir="ltr"
+                      className="size-4 text-gray-400"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <path d="m21 21-4.3-4.3"></path>
+                    </svg>
+                  </div>
+               
+                </div>
                 <div className="relative max-w-xs">
                   <label className="sr-only">Select Month</label>
                   <DatePicker
@@ -68,21 +116,23 @@ const MonthlyReport = () => {
                       <th className="px-6 py-3 text-center text-lg font-medium text-[#333333] uppercase whitespace-nowrap">اسم الموظف</th>
                       <th className="px-6 py-3 text-center text-lg font-medium text-[#333333] uppercase whitespace-nowrap">الفرع</th>
                       {/* <th className="px-6 py-3 text-center text-lg font-medium text-[#333333] uppercase whitespace-nowrap">عدد ساعات العمل</th> */}
-                      <th className="px-6 py-3 text-center text-lg font-medium text-[#333333] uppercase whitespace-nowrap">عدد مرات الحضور</th>
-                      <th className="px-6 py-3 text-center text-lg font-medium text-[#333333] uppercase whitespace-nowrap">عدد مرات الغياب</th>
-                      <th className="px-6 py-3 text-center text-lg font-medium text-[#333333] uppercase whitespace-nowrap">عدد مرات الغياب بعذر</th>
+                      <th className="px-6 py-3 text-center text-lg font-medium text-[#333333] uppercase whitespace-nowrap">الحضور</th>
+                      <th className="px-6 py-3 text-center text-lg font-medium text-[#333333] uppercase whitespace-nowrap"> الغياب بعذر</th>
+                      <th className="px-6 py-3 text-center text-lg font-medium text-[#333333] uppercase whitespace-nowrap">الغياب بدون عذر</th>
+                      <th className="px-6 py-3 text-center text-lg font-medium text-[#333333] uppercase whitespace-nowrap">اذن انصراف</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {reports?.map((report, index) => (
+                    {filteredAndSortedEmployees?.map((report, index) => (
                       <tr key={index}>
-                        <td className="px-6 py-4 whitespace-nowrap text-base font-medium text-gray-800">{index + 1}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-base font-medium text-gray-800">{report.uniqueNumber}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-base font-medium text-gray-800">{report.username || "N/A"}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-base text-center font-medium text-gray-800">{report.companyBranch || "N/A"}</td>
                         {/* <td className="px-6 py-4 whitespace-nowrap text-base text-center font-medium text-gray-800">{report.totalWorkHours || "N/A"}</td> */}
-                        <td className="px-6 py-4 whitespace-nowrap text-base text-center font-medium text-gray-800">{report.totalCheckInCount || "N/A"}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-base text-center font-medium text-gray-800">{report.totalAbsenceCount || "N/A"}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-base text-center font-medium text-gray-800">{report.totalAbsenceWithReasonCount || "N/A"}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-base text-center font-medium text-gray-800">{report.totalCheckInCount || 0}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-base text-center font-medium text-gray-800">{report.totalAbsenceWithReasonCount || 0}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-base text-center font-medium text-gray-800">{report.totalAbsenceWithoutReasonCount ||0}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-base text-center font-medium text-gray-800">{report.totalNotCompletedCount || 0}</td>
                       </tr>
                     ))}
                   </tbody>

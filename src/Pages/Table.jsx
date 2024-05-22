@@ -101,54 +101,35 @@ export const Table = () => {
     })
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-    // const getStatusText = (status) => {
-    //   switch (status) {
-    //     case "No Record":
-    //       return { text: "لم يبدأ", bgColor: "#E2E8F0" };
-    //     case "Pending":
-    //       return { text: "قيد الانتظار", bgColor: "#FB8832" };
-    //     case "Completed":
-    //       return { text: "مكتمل", bgColor: "#4AAF05" };
-    //     case "Canceled":
-    //       return { text: "ملغي", bgColor: "#FF5756" };
-    //     case "Absent with Reason":
-    //       return { text: "غائب مع سبب", bgColor: "#FFDD57" }; 
-    //     case "Absent without Reason":
-    //       return { text: "غائب بدون سبب", bgColor: "#FF5756" };
-    //     case "Day not completed":
-    //       return { text: "اخذ اذن انصراف", bgColor: "#E2E8F0" };
-    //     default:
-    //       return { text: "", bgColor: "#0000" };
-    //   }
-    // };
-    const getStatusText = (status) => {
-      switch (status) {
-        case "No Record":
-          return { text: "لم يبدأ", bgColor: "#E2E8F0" }; 
-        case "Pending":
-          return { text: "قيد الانتظار", bgColor: "#FB8832" };
-        case "Completed":
-          return { text: "مكتمل", bgColor: "#4AAF05" };
-        case "Canceled":
-          return { text: "ملغي", bgColor: "#FF5756" }; 
-        case "Absent with Reason":
-          return { text: "غائب مع سبب", bgColor: "#FFDD57" };
-        case "Absent without Reason":
-          return { text: "غائب بدون سبب", bgColor: "#FF5756" }; 
-        case "Day not completed":
-          return { text: "اخذ اذن انصراف", bgColor: "#E2E8F0" };
-        default:
-          return { text: "", bgColor: "#f4f4f4" }; 
-      }
-    };
-    
+
+  const getStatusText = (status) => {
+    switch (status) {
+      case "No Record":
+        return { text: "لم يبدأ", bgColor: "#E2E8F0" };
+      case "Pending":
+        return { text: "قيد الانتظار", bgColor: "#FB8832" };
+      case "Completed":
+        return { text: "مكتمل", bgColor: "#4AAF05" };
+      case "Canceled":
+        return { text: "ملغي", bgColor: "#FF5756" };
+      case "Absent with Reason":
+        return { text: "غائب مع سبب", bgColor: "#FFDD57" };
+      case "Absent without Reason":
+        return { text: "غائب بدون سبب", bgColor: "#FF5756" };
+      case "Day not completed":
+        return { text: "اخذ اذن انصراف", bgColor: "#E2E8F0" };
+      default:
+        return { text: "لم يبدأ", bgColor: "#f4f4f4" };
+    }
+  };
+
   const addEmployee = () => {
     navigate("/add-employee");
   };
 
-  const openModal = (reason,absentTime) => {
+  const openModal = (reason, absentTime) => {
     setAbsenceReason(reason);
-    setAbsenceTime(moment(absentTime).format("hh:mm A"))
+    setAbsenceTime(moment(absentTime).format("hh:mm A"));
     setIsModalOpen(true);
   };
 
@@ -175,6 +156,11 @@ export const Table = () => {
   ];
   const logout = () => {
     setToken(null);
+  };
+  const convertMinutesToHoursAndMinutes = (totalMinutes) => {
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    return `${hours}h ${minutes}m`;
   };
 
   return (
@@ -231,7 +217,10 @@ export const Table = () => {
                       <option value="Pending">قيد الانتظار</option>
                       <option value="Completed">مكتمل</option>
                       <option value="Absent with Reason"> غائب مع سبب</option>
-                      <option value="Absent without Reason"> غائب بدون سبب</option>
+                      <option value="Absent without Reason">
+                        {" "}
+                        غائب بدون سبب
+                      </option>
                       <option value="Day not completed">اخذ اذن انصراف</option>
                       <option value="Canceled">ملغي</option>
                     </select>
@@ -340,7 +329,7 @@ export const Table = () => {
                   <tbody className="divide-y divide-gray-200">
                     {filteredAndSortedEmployees?.length > 0 ? (
                       filteredAndSortedEmployees.map((employee, index) => {
-
+                        console.log(employee);
                         return (
                           <tr key={index}>
                             <td className="px-6 py-4 cursor-default whitespace-nowrap text-base font-medium text-gray-800">
@@ -406,12 +395,17 @@ export const Table = () => {
                               )}
                             </td>
                             <td className="px-6 py-4 cursor-default text-center whitespace-nowrap text-base text-gray-800">
-                              {employee.workHours || "N/A"}
+                              {employee.workHours && convertMinutesToHoursAndMinutes(employee.workHours) || "N/A"}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-base text-gray-800">
                               {employee.absentReason ? (
                                 <span
-                                  onClick={() => openModal(employee.absentReason,employee.absentTime)}
+                                  onClick={() =>
+                                    openModal(
+                                      employee.absentReason,
+                                      employee.absentTime
+                                    )
+                                  }
                                   className="cursor-pointer text-blue-600 underline"
                                 >
                                   {employee.absentReason.length > 10
@@ -479,20 +473,21 @@ export const Table = () => {
                   <h3
                     className="text-lg leading-6 font-medium text-gray-900"
                     id="modal-title"
-                  >
-                
-                  </h3>
+                  ></h3>
                   <div className="mt-2 p-6 text-start">
                     <p className="text-sm text-gray-500">{absenceReason}</p>
                   </div>
                 </div>
               </div>
               <div className="mt-5 sm:mt-6 absolute top-0">
-              <X className=" transition-all duration-300 hover:text-blue-700 cursor-pointer"  onClick={closeModal} />       
+                <X
+                  className=" transition-all duration-300 hover:text-blue-700 cursor-pointer"
+                  onClick={closeModal}
+                />
               </div>
               <div className="mb-2 sm:mb-4 absolute bottom-0 left-5 ">
-              {absenceTime}
-                  </div>
+                {absenceTime}
+              </div>
             </div>
           </div>
         </div>
