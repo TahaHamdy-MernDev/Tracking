@@ -124,21 +124,21 @@ export const Table = () => {
     const getStatusText = (status) => {
       switch (status) {
         case "No Record":
-          return { text: "لم يبدأ", bgColor: "#E2E8F0" }; // Light Gray
+          return { text: "لم يبدأ", bgColor: "#E2E8F0" }; 
         case "Pending":
-          return { text: "قيد الانتظار", bgColor: "#FB8832" }; // Orange
+          return { text: "قيد الانتظار", bgColor: "#FB8832" };
         case "Completed":
-          return { text: "مكتمل", bgColor: "#4AAF05" }; // Green
+          return { text: "مكتمل", bgColor: "#4AAF05" };
         case "Canceled":
-          return { text: "ملغي", bgColor: "#FF5756" }; // Red
+          return { text: "ملغي", bgColor: "#FF5756" }; 
         case "Absent with Reason":
-          return { text: "غائب مع سبب", bgColor: "#FFDD57" }; // Yellow
+          return { text: "غائب مع سبب", bgColor: "#FFDD57" };
         case "Absent without Reason":
-          return { text: "غائب بدون سبب", bgColor: "#FF5756" }; // Red
+          return { text: "غائب بدون سبب", bgColor: "#FF5756" }; 
         case "Day not completed":
-          return { text: "اخذ اذن انصراف", bgColor: "#E2E8F0" }; // Light Gray
+          return { text: "اخذ اذن انصراف", bgColor: "#E2E8F0" };
         default:
-          return { text: "", bgColor: "#f4f4f4" }; // Transparent
+          return { text: "", bgColor: "#f4f4f4" }; 
       }
     };
     
