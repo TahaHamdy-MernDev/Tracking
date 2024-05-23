@@ -61,9 +61,13 @@ export const Table = () => {
         } else {
           const date = selected.format("YYYY-MM-DD");
           const response = await Api.get(`/user/reports?date=${date}`);
+         
           setEmployees(response.data.data.dailyReports[0].reports);
         }
       } catch (err) {
+        if (err.response.status===404) {
+          setEmployees([])
+        }
         console.error("Failed to fetch employees:", err.response);
       }
     };
@@ -101,7 +105,6 @@ export const Table = () => {
     })
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-
   const getStatusText = (status) => {
     switch (status) {
       case "No Record":
@@ -118,6 +121,8 @@ export const Table = () => {
         return { text: "غائب بدون سبب", bgColor: "#FF5756" };
       case "Day not completed":
         return { text: "اخذ اذن انصراف", bgColor: "#E2E8F0" };
+      case "Holiday":
+        return { text: "اجازه", bgColor: "#E2E8F0" };
       default:
         return { text: "لم يبدأ", bgColor: "#f4f4f4" };
     }
@@ -329,7 +334,6 @@ export const Table = () => {
                   <tbody className="divide-y divide-gray-200">
                     {filteredAndSortedEmployees?.length > 0 ? (
                       filteredAndSortedEmployees.map((employee, index) => {
-                        console.log(employee);
                         return (
                           <tr key={index}>
                             <td className="px-6 py-4 cursor-default whitespace-nowrap text-base font-medium text-gray-800">
@@ -395,7 +399,11 @@ export const Table = () => {
                               )}
                             </td>
                             <td className="px-6 py-4 cursor-default text-center whitespace-nowrap text-base text-gray-800">
-                              {employee.workHours && convertMinutesToHoursAndMinutes(employee.workHours) || "N/A"}
+                              {(employee.workHours &&
+                                convertMinutesToHoursAndMinutes(
+                                  employee.workHours
+                                )) ||
+                                "N/A"}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-base text-gray-800">
                               {employee.absentReason ? (
@@ -433,7 +441,7 @@ export const Table = () => {
                           colSpan={headers.length}
                           className="px-6 py-4 text-center text-gray-500"
                         >
-                          لا يوجد بيانات لعرضها
+                          {employees.length === 0 && "لا توجد بيانات لهذا التاريخ"}
                         </td>
                       </tr>
                     )}
