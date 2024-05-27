@@ -153,3 +153,9 @@ select {
     
     
     
+    .sticky-name {
+      position: fixed;
+      left: 0;
+      background-color: white; /* Ensure the background color matches your table's background */
+      z-index: 1; /* Ensure it stays on top of other cells */
+    }

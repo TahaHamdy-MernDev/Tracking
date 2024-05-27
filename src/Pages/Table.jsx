@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import Api from "../Api";
 import moment from "moment";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import { UserRoundCog, UserRoundX, X } from "lucide-react";
+import { UserRoundCog, X } from "lucide-react";
 import { AuthContext } from "../components/AuthContext";
 import Loader from "../components/Loader";
 import DatePicker from "react-datepicker";
@@ -35,10 +35,13 @@ export const Table = () => {
     const fetchAvailableDates = async () => {
       try {
         const response = await Api.get("/user/available-dates");
-        const fetchedDates = response.data.data.map((date) =>
-          moment(date).format("YYYY-MM-DD")
+        console.log(response.data.data);
+        const fetchedDates = response.data.data.map((date) =>{
+          console.log( moment(date).format("YYYY-MM-DD"))
+         return moment(date).format("YYYY-MM-DD")}
         );
         const today = moment().format("YYYY-MM-DD");
+        console.log(today);
         if (!fetchedDates.includes(today)) {
           fetchedDates.push(today);
         }
@@ -174,7 +177,7 @@ export const Table = () => {
         <img src="/logo.png" alt="" />
       </h1>
       <div
-        className="min-h-96 flex flex-col mt-40 bg-white max-w-full rounded-xl overflow-x-auto overflow-y-hidden"
+        className="min-h-96 flex flex-col mt-40 bg-white max-w-7xl rounded-xl overflow-x-auto overflow-y-hidden"
         dir="ltr"
       >
         <div className="w-full min-h-96">
@@ -335,12 +338,14 @@ export const Table = () => {
                     {filteredAndSortedEmployees?.length > 0 ? (
                       filteredAndSortedEmployees.map((employee, index) => {
                         return (
-                          <tr key={index}>
+                          <tr key={index} className="odd:bg-white even:bg-gray-200">
                             <td className="px-6 py-4 cursor-default whitespace-nowrap text-base font-medium text-gray-800">
                               {employee.uniqueNumber || "N/A"}
                             </td>
-                            <td className="px-6 py-4 cursor-default whitespace-nowrap text-base font-medium text-gray-800">
+                            <td className="px-6 relative py-4 cursor-default  whitespace-nowrap text-base font-medium text-gray-800">
+                         
                               {employee.username || "N/A"}
+                         
                             </td>
                             <td className="px-6 py-4 cursor-default text-center whitespace-nowrap text-base text-gray-800">
                               <span
