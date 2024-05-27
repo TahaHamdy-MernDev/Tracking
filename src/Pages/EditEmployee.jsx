@@ -6,6 +6,7 @@ import {
   Phone,
   UserRound,
   MoveLeft,
+  UserRoundX,
 } from "lucide-react";
 import { useState, useEffect, useContext } from "react";
 import { useForm } from "react-hook-form";
@@ -20,12 +21,12 @@ const EditEmployee = () => {
   const { id: employeeId } = useParams();
   const [employeeData, setEmployeeData] = useState(null);
   const [buttonLoading, setButtonLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const {
     register,
     handleSubmit,
-    formState: { errors },
     setValue,
-    reset
+
   } = useForm();
   const [showPassword, setShowPassword] = useState(false);
   const { userData, loading, token } = useContext(AuthContext);
@@ -73,6 +74,28 @@ const EditEmployee = () => {
       setButtonLoading(false);
     }
   };
+  const handleDelete = async () => {
+    try {
+      await Api.delete(`user/delete/${employeeId}`);
+      toast.success("تم حذف الموظف بنجاح.");
+      navigate(-1);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "An error occurred while deleting the employee.");
+    }
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const confirmDelete = () => {
+    handleDelete();
+    closeModal();
+  };
 
   const companyBranches = [
     { id: 1, name: "زايد" },
@@ -81,7 +104,6 @@ const EditEmployee = () => {
     { id: 4, name: "الساحل" },
   ];
 
-  // Show validation errors as toast notifications
   const handleValidationErrors = (errors) => {
     Object.values(errors).forEach((error) => {
       toast.error(error.message);
@@ -99,7 +121,8 @@ const EditEmployee = () => {
       <h1 className="absolute top-0 md:top-10 mx-auto max-w-96 max-h-14 md:max-w-[60] h-12 mb-40 p-2">
         <img src="/logo.png" alt="" />
       </h1>
-      <div>
+      <div className=" ">
+      <UserRoundX onClick={openModal} className="cursor-pointer text-red-600" />
         <p className="p-text underline underline-offset-[8px] text-center mb-3">
           تعديل موظف
         </p>
@@ -118,6 +141,7 @@ const EditEmployee = () => {
           <div className="input-wrapper">
             <Lock className="icon" />
             <input
+            autoComplete="false"
               type={showPassword ? "text" : "password"}
               {...register("password")}
               placeholder="كلمة السر (اتركها فارغة إذا لم ترغب في التغيير)"
@@ -157,8 +181,31 @@ const EditEmployee = () => {
           <button type="submit" className="form-btn" disabled={buttonLoading}>
             {buttonLoading ? <Load /> : "تحديث البيانات"}
           </button>
+  
         </form>
       </div>
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-lg font-semibold mb-4">تأكيد الحذف</h2>
+            <p className="mb-4">هل أنت متأكد أنك تريد حذف هذا الموظف؟</p>
+            <div className="flex justify-end space-x-2 gap-2">
+              <button
+                onClick={closeModal}
+                className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
+              >
+                إلغاء
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+              >
+                حذف
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

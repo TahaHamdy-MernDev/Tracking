@@ -1,5 +1,5 @@
 import { Eye, EyeOff, Lock, Phone } from "lucide-react";
-import { act, useContext, useState } from "react";
+import {  useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../components/AuthContext";
 import Api from "../Api";
@@ -7,19 +7,18 @@ import { Navigate, useNavigate } from "react-router-dom";
 import Load from "../components/Load";
 import { toast } from "react-toastify";
 export default function Login() {
-  const [buttonStatus,setButtonStatus]=useState(false)
+  const [buttonStatus, setButtonStatus] = useState(false);
   const {
     register,
     handleSubmit,
-    formState: { errors },
   } = useForm();
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
-  const { setToken, token, setUserData ,userData} = useContext(AuthContext);
+  const { setToken, token, setUserData, userData } = useContext(AuthContext);
 
   if (token) {
-    const userRole = userData?.role
+    const userRole = userData?.role;
     if (userRole === "admin") {
       return <Navigate to="/dashboard" replace />;
     } else if (userRole === "employee") {
@@ -33,9 +32,9 @@ export default function Login() {
 
   const onSubmit = async (formData) => {
     try {
-      setButtonStatus(true)
+      setButtonStatus(true);
       const response = await Api.post("/auth/login", formData);
-      setButtonStatus(false)
+      setButtonStatus(false);
       let { data } = response.data;
 
       setToken(data.token);
@@ -51,15 +50,16 @@ export default function Login() {
       toast.success("تم تسجيل الدخول بنجاح!");
     } catch (error) {
 
-      if ((error.response.data.status = 400)) {
+      if (error.response.data.status == 400) {
         toast.info(error.response.data.message);
       } else {
-        toast.error(err.response?.data?.message || "An error occurred while login");
+        toast.error(
+          error.response?.data?.message || "An error occurred while login"
+        );
       }
-      setButtonStatus(false)
+      setButtonStatus(false);
       setToken(null);
-      localStorage.removeItem("token")
-    
+      localStorage.removeItem("token");
     }
   };
 
@@ -82,7 +82,6 @@ export default function Login() {
           <div className="flex items-center justify-between gap-2 py-4 px-2 mb-12">
             <span
               className={`p-text underline underline-offset-[8px] cursor-default`}
-
             >
               تسجيل الدخول موظف
             </span>
@@ -100,17 +99,17 @@ export default function Login() {
           <div className="relative flex-col">
             <div className="input-wrapper">
               <Phone className="icon rotate-[260deg] " />
-            <input
-              dir="rtl"
-              type="tel"
-              {...register("phoneNumber", { required: true })}
-              placeholder="رقم الهاتف"
-              required
-              className="input-field"
-            />
+              <input
+                dir="rtl"
+                type="tel"
+                {...register("phoneNumber", { required: true })}
+                placeholder="رقم الهاتف"
+                required
+                className="input-field"
+              />
             </div>
           </div>
-         
+
           <div className="input-wrapper">
             <Lock className="icon" />
             <input
@@ -128,22 +127,26 @@ export default function Login() {
             )}
           </div>
 
-          <div class="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-4">
             <input
               onClick={togglePassword}
               type="checkbox"
-              class="h-4 w-4 rounded-sm  text-indigo-600 focus:ring-indigo-500"
+              className="h-4 w-4 rounded-sm  text-indigo-600 focus:ring-indigo-500"
             />
             <label
-              for="filter-mobile-color-1"
-              class="ml-3 min-w-0 flex-1 p-text"
+              htmlFor="filter-mobile-color-1"
+              className="ml-3 min-w-0 flex-1 p-text"
             >
               اظهار كلمة السر
             </label>
           </div>
           <div className=" flex items-center justify-center w-full">
-          <button disabled={buttonStatus} type="submit" className="form-btn">
-              {buttonStatus ? <Load progressClass="" loadClass=" " /> : "تسجيل الدخول"}
+            <button disabled={buttonStatus} type="submit" className="form-btn">
+              {buttonStatus ? (
+                <Load progressClass="" loadClass=" " />
+              ) : (
+                "تسجيل الدخول"
+              )}
             </button>
           </div>
         </form>

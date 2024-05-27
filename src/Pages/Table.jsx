@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import Api from "../Api";
 import moment from "moment";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import { UserRoundCog, X } from "lucide-react";
+import { UserRoundCog, UserRoundX, X } from "lucide-react";
 import { AuthContext } from "../components/AuthContext";
 import Loader from "../components/Loader";
 import DatePicker from "react-datepicker";
@@ -236,7 +236,7 @@ export const Table = () => {
                   <DatePicker
                     selected={selectedDate}
                     onChange={handleDateChange}
-                    includeDates={availableDates.map((date) => new Date(date))}
+                    includeDates={availableDates?.map((date) => new Date(date))}
                     dateFormat="yyyy-MM-dd"
                     className="py-2 px-3 block w-full bg-[#E2E8F0] border-gray-200 shadow-sm rounded-lg text-sm focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
                   />
@@ -431,6 +431,7 @@ export const Table = () => {
                               <Link to={`/edit-employee/${employee._id}`}>
                                 <UserRoundCog />
                               </Link>
+                            
                             </td>
                           </tr>
                         );
