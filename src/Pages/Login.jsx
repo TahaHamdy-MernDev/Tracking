@@ -32,8 +32,14 @@ export default function Login() {
 
   const onSubmit = async (formData) => {
     try {
+      const trimmedFormData = {
+        ...formData,
+        phoneNumber: formData.phoneNumber.trim(),
+        password: formData.password.trim()
+      };
+  
       setButtonStatus(true);
-      const response = await Api.post("/auth/login", formData);
+    const response = await Api.post("/auth/login", trimmedFormData);
       setButtonStatus(false);
       let { data } = response.data;
 
