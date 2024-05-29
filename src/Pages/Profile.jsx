@@ -43,7 +43,7 @@ export default function Profile() {
         toast.success("تم تسجيل الحضور بنجاح.");
       })
       .catch((error) => {
-        if ((error.response.data.status = 400)) {
+        if (error.response.data.status = 400) {
           toast.info(error.response.data.message);
         } else {
           toast.error("حدث خطأ أثناء تسجيل الحضور.");
@@ -63,7 +63,7 @@ export default function Profile() {
         toast.success("تم تسجيل الانصراف بنجاح.");
       })
       .catch((error) => {
-        if ((error.response.data.status = 400)) {
+        if (error.response.data.status = 400) {
           toast.info(error.response.data.message);
         } else {
           toast.error("حدث خطأ أثناء تسجيل الانصراف.");
@@ -91,19 +91,16 @@ export default function Profile() {
   };
 
   const { username: userName, attendance } = userData;
-  const permissionCount = attendance.filter(
-    (entry) => entry.isAbsent
-  ).length;
-  const absenceCount = attendance.filter(
-    (entry) => entry.isAbsent && !entry.absentReason
-  ).length;
+  const absenceCount = attendance.filter((entry) => entry.isAbsent).length;
+  const permissionCount = attendance.filter((entry) => entry.absentReason).length;
   const attendanceCount = attendance.filter(
-    (entry) => !entry.isAbsent && !entry.absentReason
+    (entry) => !entry.isAbsent && entry.checkIn
   ).length;
-
+  console.log(permissionCount);
+  console.log(absenceCount);
+  console.log(attendanceCount);
   return (
     <div className="w-screen h-screen relative overflow-hidden p-2 flex justify-center items-center">
-     
       <h1 className="absolute top-0 md:top-10 mx-auto max-w-96 max-h-14 md:max-w-[60] h-12 mb-40 p-2">
         <img src="/logo.png" alt="" />
       </h1>

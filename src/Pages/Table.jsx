@@ -119,7 +119,11 @@ export const Table = () => {
       case "Canceled":
         return { text: "ملغي", bgColor: "#FF5756" };
       case "Absent with Reason":
-        return { text: "غائب مع سبب", bgColor: "#FFDD57" };
+        return { text: "اذن", bgColor: "#FFDD57" };
+      case "workMeeting":
+        return { text: "ميتنج", bgColor: "#FFDD57" };
+      case "willBeLate":
+        return { text: "اذن تاخير", bgColor: "#FFDD57" };
       case "Absent without Reason":
         return { text: "غائب بدون سبب", bgColor: "#FF5756" };
       case "Day not completed":
@@ -154,6 +158,7 @@ export const Table = () => {
     "اسم الموظف",
     "الحالة",
     "الفرع",
+    "وقت الاذن",
     "وقت الحضور",
     "الموقع",
     "وقت الانصراف",
@@ -364,6 +369,11 @@ export const Table = () => {
                               {employee.companyBranch || "N/A"}
                             </td>
                             <td className="px-6 py-4 cursor-default text-center whitespace-nowrap text-base text-gray-800">
+                              {employee.absentTime
+                                ? moment(employee.absentTime).format("hh:mm A")
+                                : "N/A"}
+                            </td>
+                            <td className="px-6 py-4 cursor-default text-center whitespace-nowrap text-base text-gray-800">
                               {employee.checkInTime
                                 ? moment(employee.checkInTime).format("hh:mm A")
                                 : "N/A"}
@@ -499,9 +509,9 @@ export const Table = () => {
                   onClick={closeModal}
                 />
               </div>
-              <div className="mb-2 sm:mb-4 absolute bottom-0 left-5 ">
+              {/* <div className="mb-2 sm:mb-4 absolute bottom-0 left-5 ">
                 {absenceTime}
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

@@ -33,7 +33,7 @@ const navigate = useNavigate()
   useEffect(() => {
 
     fetchData()
-  }, [token]);
+  }, [ token]);
 
   const getLocation = () => {
     if (!navigator.geolocation) {
