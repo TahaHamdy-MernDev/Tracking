@@ -6,35 +6,47 @@ import { MapPinOff } from "lucide-react";
 import { Navigate, useNavigate } from "react-router-dom";
 import Load from "../components/Load";
 import { toast } from "react-toastify";
+import { getLocation } from "current-location-geo";
 export default function Profile() {
   const [actionErrors, setActionErrors] = useState(null);
   const [actionSuccess, setActionSuccess] = useState(null);
   const [loadingCheckIn, setLoadingCheckIn] = useState(false);
   const [loadingCheckOut, setLoadingCheckOut] = useState(false);
+  const [location, setLocation] = useState(null);
   const {
     userData,
     loading,
     setUserData,
-    getLocation,
-    location,
+    // getLocation,
+    // location,
     permissionDenied,
-    error,
+    // error,
     token,
   } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!location) {
-      getLocation();
-    }
-  }, [location, getLocation]);
+  // useEffect(() => {
+  //   if (!location) {
+  //     getLocation();
+  //   }
+  // }, [location, getLocation]);
 
   useEffect(() => {
     if (!token) {
       navigate("/");
       return;
     }
+    
   }, [token, navigate]);
+  useEffect(() => {
+    getLocation(function (err, position) {
+      if (err) {
+        console.error('Error:', err);
+      } else {
+        setLocation({ latitude: position.latitude,longitude: position.longitude });
+      }
+    });
+  }, []);
   const checkIn = async () => {
     setLoadingCheckIn(true);
     await Api.post("user/check-in", { location })
@@ -96,9 +108,6 @@ export default function Profile() {
   const attendanceCount = attendance.filter(
     (entry) => !entry.isAbsent && entry.checkIn
   ).length;
-  console.log(permissionCount);
-  console.log(absenceCount);
-  console.log(attendanceCount);
   return (
     <div className="w-screen h-screen relative overflow-hidden p-2 flex justify-center items-center">
       <h1 className="absolute top-0 md:top-10 mx-auto max-w-96 max-h-14 md:max-w-[60] h-12 mb-40 p-2">
