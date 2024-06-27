@@ -5,10 +5,12 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import Api from "../Api";
 import moment from "moment";
 import "moment/locale/ar";
+import { X } from "lucide-react";
 export default function MonthlyUserReport() {
   const { month, id } = useParams();
   const [reports, setReports] = useState(null);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [absenceReason, setAbsenceReason] = useState("");
   const { userData, loading, token } = useContext(AuthContext);
   useEffect(() => {
     if (!token) return;
@@ -98,6 +100,16 @@ export default function MonthlyUserReport() {
     return statusCountsFormatted;
   };
   const statusCounts = extractStatusCounts(reports);
+  const openModal = (reason) => {
+    setAbsenceReason(reason);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setAbsenceReason("");
+  };
+
   return (
     <div className="flex justify-center items-start min-h-screen relative p-2">
       <h1 className="absolute top-0 md:top-10 mx-auto max-w-96 max-h-14 md:max-w-[60] h-12 mb-40 p-2">
@@ -267,6 +279,49 @@ export default function MonthlyUserReport() {
           </div>
         </div>
       </div>
+      {isModalOpen && (
+        <div
+          className="fixed z-10 inset-0 overflow-y-auto"
+          aria-labelledby="modal-title"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div
+              className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+              aria-hidden="true"
+              onClick={closeModal}
+            ></div>
+
+            <span
+              className="hidden sm:inline-block sm:align-middle sm:h-screen"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+
+            <div className=" relative inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+              <div>
+                <div className="mt-3 text-center sm:mt-5">
+                  <h3
+                    className="text-lg leading-6 font-medium text-gray-900"
+                    id="modal-title"
+                  >{" "}</h3>
+                  <div className="mt-2 p-6 text-start">
+                    <p className="text-sm text-gray-500">{absenceReason}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-5 sm:mt-6 absolute top-0">
+                <X
+                  className=" transition-all duration-300 hover:text-blue-700 cursor-pointer"
+                  onClick={closeModal}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
