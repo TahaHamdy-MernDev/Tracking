@@ -7,6 +7,7 @@ import { Table } from "../Pages/Table";
 import { Location } from "../Pages/Location";
 import EditEmployee from "../Pages/EditEmployee";
 import MonthlyReport from "../Pages/MonthlyReport";
+import MonthlyUserReport from "../Pages/MonthlyUserReport";
 
 
 const ProjectRoutes = () => {
@@ -42,6 +43,10 @@ const ProjectRoutes = () => {
     {
       path: "/monthly-report",
       element: <MonthlyReport />,
+    },
+    {
+      path: "/user-report/:month/:id",
+      element: <MonthlyUserReport />,
     },
   ]);
   return element;

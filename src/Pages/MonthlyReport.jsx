@@ -5,7 +5,7 @@ import Loader from "../components/Loader";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
   // tests
 const MonthlyReport = () => {
   const [reports, setReports] = useState([]);
@@ -13,7 +13,6 @@ const MonthlyReport = () => {
   const [selectedMonth, setSelectedMonth] = useState(new Date());
   const [statusFilter, setStatusFilter] = useState("");
   const { userData, loading, token } = useContext(AuthContext);
-
   useEffect(() => {
     if (!token) return;
 
@@ -82,7 +81,6 @@ const MonthlyReport = () => {
       const remainingMinutes = minutes % 60;
       return `${hours}:${remainingMinutes.toString().padStart(2, '0')}`;
     };
-    
   return (
     <div className="flex justify-center items-start min-h-screen relative p-2">
       <h1 className="absolute top-0 md:top-10 mx-auto max-w-96 max-h-14 md:max-w-[60] h-12 mb-40 p-2">
@@ -149,6 +147,7 @@ const MonthlyReport = () => {
                       <th className="px-6 py-3 text-center text-lg font-medium text-[#333333] uppercase whitespace-nowrap">الغياب بدون عذر</th>
                       <th className="px-6 py-3 text-center text-lg font-medium text-[#333333] uppercase whitespace-nowrap">اذن انصراف</th>
                       <th className="px-6 py-3 text-center text-lg font-medium text-[#333333] uppercase whitespace-nowrap">تم الالغاء</th>
+                      <th className="px-6 py-3 text-center text-lg font-medium text-[#333333] uppercase whitespace-nowrap"></th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 ">
@@ -163,6 +162,10 @@ const MonthlyReport = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-base text-center font-medium text-gray-800">{report.totalAbsenceWithoutReasonCount || 0}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-base text-center font-medium text-gray-800">{report.totalNotCompletedCount || 0}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-base text-center font-medium text-gray-800">{report.totalCanceledCount || 0}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-base text-center font-medium text-gray-800">
+                         <Link to={`/user-report/${moment(selectedMonth).format("YYYY-MM")}/${report.userId}`}
+                          >details</Link> 
+                          </td>
                       </tr>
                     ))}
                   </tbody>

@@ -497,7 +497,7 @@ export const Table = () => {
                   <h3
                     className="text-lg leading-6 font-medium text-gray-900"
                     id="modal-title"
-                  ></h3>
+                  >{" "}</h3>
                   <div className="mt-2 p-6 text-start">
                     <p className="text-sm text-gray-500">{absenceReason}</p>
                   </div>
@@ -509,9 +509,6 @@ export const Table = () => {
                   onClick={closeModal}
                 />
               </div>
-              {/* <div className="mb-2 sm:mb-4 absolute bottom-0 left-5 ">
-                {absenceTime}
-              </div> */}
             </div>
           </div>
         </div>
