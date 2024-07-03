@@ -49,6 +49,10 @@ export default function AbsentReason() {
       data.permissionType="willBeLate"
       data.willBeLate=true
     }
+    else if(data.permissionType=="notCompleteDay"){
+      data.permissionType="notCompleteDay"
+      data.notCompleteDay=true
+    }
     data = { ...data, location };
     await Api.post("user/markAbsence", data)
       .then(() => {

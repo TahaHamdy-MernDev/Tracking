@@ -35,13 +35,10 @@ export const Table = () => {
     const fetchAvailableDates = async () => {
       try {
         const response = await Api.get("/user/available-dates");
-        console.log(response.data.data);
         const fetchedDates = response.data.data.map((date) =>{
-          console.log( moment(date).format("YYYY-MM-DD"))
          return moment(date).format("YYYY-MM-DD")}
         );
         const today = moment().format("YYYY-MM-DD");
-        console.log(today);
         if (!fetchedDates.includes(today)) {
           fetchedDates.push(today);
         }
@@ -51,20 +48,19 @@ export const Table = () => {
         console.error("Failed to fetch available dates:", err.response);
       }
     };
-
     const fetchData = async () => {
       try {
         const today = moment().startOf("day");
         const selected = moment(selectedDate).startOf("day");
-
+        
         if (selected.isSame(today, "day")) {
           const response = await Api.get("/user/today-live-data");
-
+          
           setEmployees(response.data.data);
         } else {
           const date = selected.format("YYYY-MM-DD");
           const response = await Api.get(`/user/reports?date=${date}`);
-         
+          
           setEmployees(response.data.data.dailyReports[0].reports);
         }
       } catch (err) {
@@ -74,11 +70,12 @@ export const Table = () => {
         console.error("Failed to fetch employees:", err.response);
       }
     };
-
+    
     fetchAvailableDates();
     fetchData();
   }, [token, navigate, selectedDate]);
-
+  console.log(employees[0]);
+  
   if (loading) return <Loader />;
   if (!userData) return <Navigate to="/" replace />;
   if (userData.role !== "admin") return <Navigate to="/profile" replace />;

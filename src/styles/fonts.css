@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-@font-face { font-display: swap; font-style : normal; src: url("/public/fonts/CairoSemiBold.ttf"); font-family : "Cairo"; font-weight : 600;  }
-@font-face { font-display: swap; font-style : normal; src: url("/public/fonts/CairoMedium.ttf"); font-family : "Cairo"; font-weight : 500;  }
-@font-face { font-display: swap; font-style : normal; src: url("/public/fonts/CairoRegular.ttf"); font-family : "Cairo"; font-weight : 400;  }
-@font-face { font-display: swap; font-style : normal; src: url("/public/fonts/CairoLight.ttf"); font-family : "Cairo"; font-weight : 300;  }
-@font-face { font-display: swap; font-style : normal; src: url("/public/fonts/CairoBold.ttf"); font-family : "Cairo"; font-weight : 700;  }
+@font-face { font-display: swap; font-style : normal; src: url("/fonts/CairoSemiBold.ttf"); font-family : "Cairo"; font-weight : 600;  }
+@font-face { font-display: swap; font-style : normal; src: url("/fonts/CairoMedium.ttf"); font-family : "Cairo"; font-weight : 500;  }
+@font-face { font-display: swap; font-style : normal; src: url("/fonts/CairoRegular.ttf"); font-family : "Cairo"; font-weight : 400;  }
+@font-face { font-display: swap; font-style : normal; src: url("/fonts/CairoLight.ttf"); font-family : "Cairo"; font-weight : 300;  }
+@font-face { font-display: swap; font-style : normal; src: url("/fonts/CairoBold.ttf"); font-family : "Cairo"; font-weight : 700;  }
