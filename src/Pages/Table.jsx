@@ -7,6 +7,7 @@ import { AuthContext } from "../components/AuthContext";
 import Loader from "../components/Loader";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { toast } from "react-toastify";
 
 export const Table = () => {
   const [employees, setEmployees] = useState([]);
@@ -17,9 +18,16 @@ export const Table = () => {
   const { userData, loading, token, setToken } = useContext(AuthContext);
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isHolidayModalOpen, setIsHolidayModalOpen] = useState(false);
   const [absenceReason, setAbsenceReason] = useState("");
   const [absenceTime, setAbsenceTime] = useState();
 
+  const onCloseHolidayModal = () => {
+    setIsHolidayModalOpen(false);
+  };
+  const OpenHolidayModal = () => {
+    setIsHolidayModalOpen(true);
+  };
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
@@ -35,9 +43,9 @@ export const Table = () => {
     const fetchAvailableDates = async () => {
       try {
         const response = await Api.get("/user/available-dates");
-        const fetchedDates = response.data.data.map((date) =>{
-         return moment(date).format("YYYY-MM-DD")}
-        );
+        const fetchedDates = response.data.data.map((date) => {
+          return moment(date).format("YYYY-MM-DD");
+        });
         const today = moment().format("YYYY-MM-DD");
         if (!fetchedDates.includes(today)) {
           fetchedDates.push(today);
@@ -52,30 +60,29 @@ export const Table = () => {
       try {
         const today = moment().startOf("day");
         const selected = moment(selectedDate).startOf("day");
-        
+
         if (selected.isSame(today, "day")) {
           const response = await Api.get("/user/today-live-data");
-          
+
           setEmployees(response.data.data);
         } else {
           const date = selected.format("YYYY-MM-DD");
           const response = await Api.get(`/user/reports?date=${date}`);
-          
+
           setEmployees(response.data.data.dailyReports[0].reports);
         }
       } catch (err) {
-        if (err.response.status===404) {
-          setEmployees([])
+        if (err.response.status === 404) {
+          setEmployees([]);
         }
         console.error("Failed to fetch employees:", err.response);
       }
     };
-    
+
     fetchAvailableDates();
     fetchData();
   }, [token, navigate, selectedDate]);
-  console.log(employees[0]);
-  
+
   if (loading) return <Loader />;
   if (!userData) return <Navigate to="/" replace />;
   if (userData.role !== "admin") return <Navigate to="/profile" replace />;
@@ -173,6 +180,21 @@ export const Table = () => {
     return `${hours}h ${minutes}m`;
   };
 
+  const setAsHoliday = async () => {
+    const setHoliday = moment(selectedDate).startOf("day").format("YYYY-MM-DD");
+
+    await Api.post(`/user/set-holiday?date=${setHoliday}`)
+      .then(() => {
+        toast.success("successfully...!");
+        setIsHolidayModalOpen(false);
+      })
+      .catch((err) => {
+        console.log();
+        const message = err?.response?.data?.message;
+        toast.error(message || "failed to set day as holiday ");
+        setIsHolidayModalOpen(false);
+      });
+  };
   return (
     <div className="flex justify-center items-start min-h-screen relative p-2">
       <h1 className="absolute top-0 md:top-10 mx-auto max-w-96 max-h-14 md:max-w-[60] h-12 mb-40 p-2">
@@ -236,16 +258,31 @@ export const Table = () => {
                     </select>
                   </div>
                 </div>
-                <div className="relative max-w-xs">
-                  <label className="sr-only">Select Date</label>
-                  <DatePicker
-                    selected={selectedDate}
-                    onChange={handleDateChange}
-                    includeDates={availableDates?.map((date) => new Date(date))}
-                    dateFormat="yyyy-MM-dd"
-                    className="py-2 px-3 block w-full bg-[#E2E8F0] border-gray-200 shadow-sm rounded-lg text-sm focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
-                  />
+                <div className=" flex justify-center items-center gap-3">
+                  <div className="relative">
+                    <label className="sr-only">Select Date</label>
+                    <DatePicker
+                      selected={selectedDate}
+                      onChange={handleDateChange}
+                      includeDates={availableDates?.map(
+                        (date) => new Date(date)
+                      )}
+                      dateFormat="yyyy-MM-dd"
+                      className="py-2 px-3 block max-w-xs bg-[#E2E8F0] border-gray-200 shadow-sm rounded-lg text-sm focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
+                    />
+                  </div>
+                  <div>
+                    <button
+                    
+                      onClick={OpenHolidayModal}
+                      type="button"
+                      className="inline-flex justify-center w-fit rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-0 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                      set as holiday
+                    </button>
+                  </div>
                 </div>
+
                 <div className="relative inline-block text-left">
                   <div>
                     <button
@@ -340,14 +377,15 @@ export const Table = () => {
                     {filteredAndSortedEmployees?.length > 0 ? (
                       filteredAndSortedEmployees.map((employee, index) => {
                         return (
-                          <tr key={index} className="odd:bg-white even:bg-gray-200">
+                          <tr
+                            key={index}
+                            className="odd:bg-white even:bg-gray-200"
+                          >
                             <td className="px-6 py-4 cursor-default whitespace-nowrap text-base font-medium text-gray-800">
                               {employee.uniqueNumber || "N/A"}
                             </td>
                             <td className="px-6 relative py-4 cursor-default  whitespace-nowrap text-base font-medium text-gray-800">
-                         
                               {employee.username || "N/A"}
-                         
                             </td>
                             <td className="px-6 py-4 cursor-default text-center whitespace-nowrap text-base text-gray-800">
                               <span
@@ -443,7 +481,6 @@ export const Table = () => {
                               <Link to={`/edit-employee/${employee._id}`}>
                                 <UserRoundCog />
                               </Link>
-                            
                             </td>
                           </tr>
                         );
@@ -454,7 +491,8 @@ export const Table = () => {
                           colSpan={headers.length}
                           className="px-6 py-4 text-center text-gray-500"
                         >
-                          {employees.length === 0 && "لا توجد بيانات لهذا التاريخ"}
+                          {employees.length === 0 &&
+                            "لا توجد بيانات لهذا التاريخ"}
                         </td>
                       </tr>
                     )}
@@ -494,7 +532,9 @@ export const Table = () => {
                   <h3
                     className="text-lg leading-6 font-medium text-gray-900"
                     id="modal-title"
-                  >{" "}</h3>
+                  >
+                    {" "}
+                  </h3>
                   <div className="mt-2 p-6 text-start">
                     <p className="text-sm text-gray-500">{absenceReason}</p>
                   </div>
@@ -505,6 +545,39 @@ export const Table = () => {
                   className=" transition-all duration-300 hover:text-blue-700 cursor-pointer"
                   onClick={closeModal}
                 />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {isHolidayModalOpen && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div className="mt-3 text-center">
+              <h3 className="text-lg leading-6 font-medium text-gray-900">
+                Set Holiday
+              </h3>
+              <div className="mt-2 px-7 py-3">
+                <h3 className="text-xl font-normal text-gray-500 mt-5 mb-6">
+                  Are you sure you want to set this day holiday?
+                </h3>
+
+                <div className="flex gap-4 items-center px-4 py-3">
+                  <button
+                    onClick={() => setAsHoliday()}
+                    type="submit"
+                    className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2"
+                  >
+                    Set Holiday
+                  </button>
+                  <button
+                    type="button"
+                    className="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 text-center"
+                    onClick={onCloseHolidayModal}
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
             </div>
           </div>
