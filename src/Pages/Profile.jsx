@@ -36,18 +36,23 @@ export default function Profile() {
       navigate("/");
       return;
     }
-    
   }, [token, navigate]);
   useEffect(() => {
     getLocation(function (err, position) {
       if (err) {
-        console.error('Error:', err);
+        console.error("Error:", err);
       } else {
-        setLocation({ latitude: position.latitude,longitude: position.longitude });
+        setLocation({
+          latitude: position.latitude,
+          longitude: position.longitude,
+        });
       }
     });
   }, []);
   const checkIn = async () => {
+    if (!location) {
+      return toast.error("please open your location....!");
+    }
     setLoadingCheckIn(true);
     await Api.post("user/check-in", { location })
       .then(({ data }) => {
@@ -55,7 +60,7 @@ export default function Profile() {
         toast.success("تم تسجيل الحضور بنجاح.");
       })
       .catch((error) => {
-        if (error.response.data.status = 400) {
+        if ((error.response.data.status = 400)) {
           toast.info(error.response.data.message);
         } else {
           toast.error("حدث خطأ أثناء تسجيل الحضور.");
@@ -68,6 +73,9 @@ export default function Profile() {
   if (loading) return <Loader />;
   if (!userData) return <Navigate to="/" replace />;
   const checkOut = async () => {
+    if (!location) {
+      return toast.error("please open your location....!");
+    }
     setLoadingCheckOut(true);
     await Api.post("user/check-out", { location })
       .then(({ data }) => {
@@ -75,7 +83,7 @@ export default function Profile() {
         toast.success("تم تسجيل الانصراف بنجاح.");
       })
       .catch((error) => {
-        if (error.response.data.status = 400) {
+        if ((error.response.data.status = 400)) {
           toast.info(error.response.data.message);
         } else {
           toast.error("حدث خطأ أثناء تسجيل الانصراف.");
@@ -104,7 +112,9 @@ export default function Profile() {
 
   const { username: userName, attendance } = userData;
   const absenceCount = attendance.filter((entry) => entry.isAbsent).length;
-  const permissionCount = attendance.filter((entry) => entry.absentReason).length;
+  const permissionCount = attendance.filter(
+    (entry) => entry.absentReason
+  ).length;
   const attendanceCount = attendance.filter(
     (entry) => !entry.isAbsent && entry.checkIn
   ).length;
@@ -138,7 +148,7 @@ export default function Profile() {
               <p className="text-white font-cairo text-2xl font-normal">
                 {userName}
               </p>
-              <img className="size-12" src="/profile.png" alt="profile-image" />
+              <img className="size-12" src="/profile.png" alt="profile" />
             </div>
 
             <div className="flex justify-between items-center w-full">

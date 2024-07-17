@@ -6,6 +6,7 @@ import { AuthContext } from "../components/AuthContext";
 import Loader from "../components/Loader";
 import Load from "../components/Load";
 import { Navigate, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function AbsentReason() {
   const [actionErrors, setActionErrors] = useState(null);
@@ -41,6 +42,9 @@ export default function AbsentReason() {
   }
 
   const onSubmit = async (data) => {
+    if(!location){
+      return toast.error("please open your location....!")
+     }
     setButtonLoading(true);
     if(data.permissionType=="meeting"){
       data.permissionType="meeting"
